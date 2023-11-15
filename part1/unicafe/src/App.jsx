@@ -11,7 +11,6 @@ const App = () => {
     setGood(good + 1)
   }
 
-
   const handleNeutralClick = () => {
     console.log('neutral clicked')
     setNeutral(neutral + 1)
@@ -22,8 +21,13 @@ const App = () => {
     setBad(bad + 1)
   }
 
-  const getAvg = () => (good - bad) / (good + neutral + bad)
-  const getPositive = () => good / (good + neutral + bad) * 100
+
+
+  const stats = {
+    good: good,
+    neutral: neutral,
+    bad: bad,
+  }
 
   return (
     <div>
@@ -32,15 +36,30 @@ const App = () => {
       <button onClick={handleNeutralClick}>neutral</button>
       <button onClick={handleBadClick}>bad</button>
 
-      <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {good + neutral + bad}</p>
-      <p>average {getAvg()}</p>
-      <p>positive {getPositive()} %</p>
+      <Statistics stats={stats}/> 
     </div>
   )
+}
+
+const Statistics = (props) => {
+  const good = props.stats.good
+  const neutral = props.stats.neutral
+  const bad = props.stats.bad
+
+  const getAvg = () => (good - bad) / (good + neutral + bad)
+  const getPositive = () => good / (good + neutral + bad) * 100
+
+  return (
+    <div>
+      <h1>statistics</h1>
+      <p>good {good} <br></br> 
+      neutral {neutral} <br></br> 
+      bad {bad} <br></br> 
+      all {good + neutral + bad} <br></br> 
+      average {getAvg()} <br></br>
+      positive {getPositive()} %</p>
+    </div>
+  ) 
 }
 
 export default App

@@ -15,6 +15,7 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState([0, 0, 0, 0, 0, 0, 0, 0])
   const [index, setIndex] = useState(0)
+  const [topIndex, setTopIndex] = useState(0)
 
   const handleNextAnecdote = () => {
     const newIndex = getRandomInt(anecdotes.length)
@@ -26,15 +27,24 @@ const App = () => {
     const newPoints = [...points]
     newPoints[index] += 1
     setPoints(newPoints)
+
+    // did this quote become the highest quote?
+    if (points[index] >= points[topIndex])
+      setTopIndex(index)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]} <br></br>
       has {points[selected]} votes
       <div>
         <button onClick={handleVote}>vote</button>
         <button onClick={handleNextAnecdote}>next anecdote</button>
+      </div>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p>{anecdotes[topIndex]} <br></br>has {points[topIndex]} votes</p>
       </div>
     </div>
   )

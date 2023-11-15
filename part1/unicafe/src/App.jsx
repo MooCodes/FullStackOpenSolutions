@@ -21,7 +21,10 @@ const App = () => {
     console.log('bad clicked')
     setBad(bad + 1)
   }
-  
+
+  const getAvg = () => (good - bad) / (good + neutral + bad)
+  const getPositive = () => good / (good + neutral + bad) * 100
+
   return (
     <div>
       <h1>give feedback</h1>
@@ -33,6 +36,9 @@ const App = () => {
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {good + neutral + bad}</p>
+      <p>average {getAvg()}</p>
+      <p>positive {getPositive()} %</p>
     </div>
   )
 }

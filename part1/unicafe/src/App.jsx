@@ -49,6 +49,15 @@ const Statistics = (props) => {
   const getAvg = () => (good - bad) / (good + neutral + bad)
   const getPositive = () => good / (good + neutral + bad) * 100
 
+  if (good + neutral + bad === 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>statistics</h1>

@@ -50,22 +50,6 @@ const App = () => {
   )
 }
 
-const VoteButton = (props) => {
-  return (
-    <div>
-      <button onClick={props.onClick}>vote</button>
-    </div>
-  )
-}
-
-const Button = (props) => {
-  return (
-    <div> 
-      <button onClick={() => props.setSelected(getRandomInt(props.length))}>next anecdote</button>
-    </div>
-  )
-}
-
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }

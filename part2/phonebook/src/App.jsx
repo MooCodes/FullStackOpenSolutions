@@ -38,17 +38,22 @@ const App = () => {
     e.preventDefault()
     
     // create a new person    
-    const newPerson = { name: newName, number: newNumber, id: persons.length + 1 }
+    const newPerson = { name: newName, number: newNumber }
 
     // check if person already exists
     if (persons.filter(person => person.name === newName).length > 0)
       alert(`${newName} has already been added to the phonebook`)
-    else
-      setPersons(persons.concat(newPerson))
+    else {
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          // reset input fields
+          setNewName('')
+          setNewNumber('')
+        })
+    }
 
-    // reset input fields
-    setNewName('')
-    setNewNumber('')
   }
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().match(searchTerm.toLowerCase()))

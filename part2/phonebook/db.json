@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -24,11 +19,6 @@
       "name": "Ali Baig",
       "number": "847-770-0096",
       "id": 5
-    },
-    {
-      "name": "Ali Baba",
-      "number": "12345",
-      "id": 6
     }
   ]
 }

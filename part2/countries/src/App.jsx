@@ -18,17 +18,15 @@ const App = () => {
 
   // whenever searchTerm is changed, update the results with the new search term
   useEffect(() => {
-    if (apiData) {
-      // if it's empty, don't reset the results state back to empty state
-      if (searchTerm === "") return setResults(null);
+    // if it's empty, reset the results state back to empty state
+    if (searchTerm === "") return setResults(null);
 
-      const filteredResults = apiData.filter((data) =>
-        data.name.common.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      console.log(filteredResults);
-      setResults(filteredResults);
-    }
-  }, [searchTerm]);
+    const filteredResults = apiData.filter((data) =>
+      data.name.common.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    console.log(filteredResults);
+    setResults(filteredResults);
+  }, [apiData, searchTerm]);
 
   // if api data has not been loaded yet, don't render anything
   if (!apiData) return null;
@@ -83,7 +81,10 @@ const Results = (props) => {
       {props.results.map((result) => {
         return (
           <div key={result.name.common}>
-            {result.name.common} <button onClick={() => props.setSearchTerm(result.name.common)}>show</button>
+            {result.name.common}{" "}
+            <button onClick={() => props.setSearchTerm(result.name.common)}>
+              show
+            </button>
           </div>
         );
       })}

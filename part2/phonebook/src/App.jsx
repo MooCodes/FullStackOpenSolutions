@@ -41,6 +41,11 @@ const App = () => {
         console.log("deleted ", personToDelete, deletedPerson);
         const newPersonList = persons.filter((person) => person.id !== id);
         setPersons(newPersonList);
+      })
+      .catch(err => {
+        console.log('error has occured', err);
+        setNotificationMsg(`Information of ${personToDelete.name} has already been deleted`);
+        setNoficiationClassName("error");
       });
   };
 
@@ -73,8 +78,8 @@ const App = () => {
             setNotificationMsg(`Updated ${returnedPerson.name}'s phone number`);
             setNoficiationClassName("success");
             setTimeout(() => {
-              setNotificationMsg(null); 
-            }, 3000)
+              setNotificationMsg(null);
+            }, 3000);
           });
       }
     } else {

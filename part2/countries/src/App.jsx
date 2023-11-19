@@ -40,7 +40,7 @@ const App = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <Results results={results} />
+      <Results setSearchTerm={setSearchTerm} results={results} />
     </div>
   );
 };
@@ -81,7 +81,11 @@ const Results = (props) => {
   return (
     <div>
       {props.results.map((result) => {
-        return <div key={result.name.common}>{result.name.common}</div>;
+        return (
+          <div key={result.name.common}>
+            {result.name.common} <button onClick={() => props.setSearchTerm(result.name.common)}>show</button>
+          </div>
+        );
       })}
     </div>
   );

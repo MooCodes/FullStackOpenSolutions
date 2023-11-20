@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+const api_key = import.meta.env.VITE_WEATHER_API_KEY;
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [apiData, setApiData] = useState(null);
   const [results, setResults] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
 
   // fetch the api data only on the first render and set it to the current api data state
   useEffect(() => {
@@ -11,7 +13,6 @@ const App = () => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setApiData(data);
       });
   }, []);
@@ -26,6 +27,19 @@ const App = () => {
     );
     console.log(filteredResults);
     setResults(filteredResults);
+
+    // make weather api call only if there's one result
+    if (filteredResults.length === 1) {
+      const lat = filteredResults[0].latlng[0];
+      const lon = filteredResults[0].latlng[1];
+      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`;
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setWeatherData(data);
+        });
+    }
   }, [apiData, searchTerm]);
 
   // if api data has not been loaded yet, don't render anything
@@ -38,7 +52,11 @@ const App = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <Results setSearchTerm={setSearchTerm} results={results} />
+      <Results
+        setSearchTerm={setSearchTerm}
+        results={results}
+        weatherData={weatherData}
+      />
     </div>
   );
 };
@@ -55,7 +73,10 @@ const Results = (props) => {
 
   if (props.results.length === 1) {
     const country = props.results[0];
-    console.log(country);
+    const temp = Math.round((props.weatherData.main.temp - 273.15) * 1.8 + 32);
+    const wind = props.weatherData.wind.speed;
+    const icon = props.weatherData.weather[0].icon
+    
     return (
       <div>
         <h1>{country.name.common}</h1>
@@ -71,6 +92,13 @@ const Results = (props) => {
           ))}
         </ul>
         <img src={country.flags.png} alt={country.flags.alt} />
+        <h2>Weather in {country.capital[0]}</h2>
+        <p>
+          temperature {temp}
+          {"\u00B0"}
+        </p>
+        <img src={`https://openweathermap.org/img/wn/${icon}@2x.png`} />
+        <p>wind {wind} m/s</p>
       </div>
     );
   }

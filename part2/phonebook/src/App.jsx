@@ -80,6 +80,9 @@ const App = () => {
             setTimeout(() => {
               setNotificationMsg(null);
             }, 3000);
+          }).catch(error => {
+            setNotificationMsg(error.response.data.error);
+            setNoficiationClassName("error"); 
           });
       }
     } else {

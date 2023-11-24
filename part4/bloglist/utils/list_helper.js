@@ -32,28 +32,50 @@ const mostBlogs = (blogs) => {
   let mostBlogsAuthor = {
     author: "",
     blogs: -1,
-  }
+  };
 
   for (let i = 0; i < blogs.length; i++) {
     // increment the # of blogs for this author
     if (!mostBlogsHashMap[blogs[i].author])
       mostBlogsHashMap[blogs[i].author] = 1;
-    else
-      mostBlogsHashMap[blogs[i].author] += 1;
+    else mostBlogsHashMap[blogs[i].author] += 1;
 
-    if (mostBlogsHashMap[blogs[i].author] > mostBlogsAuthor.blogs) {
+    if (mostBlogsHashMap[blogs[i].author] > mostBlogsAuthor.blogs)
       mostBlogsAuthor = {
         author: blogs[i].author,
-        blogs: mostBlogsHashMap[blogs[i].author]
-      }
-    }
+        blogs: mostBlogsHashMap[blogs[i].author],
+      };
   }
   return mostBlogsAuthor;
-}
+};
+
+const mostLikes = (blogs) => {
+  const mostLikesHashMap = {};
+
+  let mostLikedAuthor = {
+    author: "",
+    likes: -1,
+  };
+
+  for (let i = 0; i < blogs.length; i++) {
+    if (!mostLikesHashMap[blogs[i].author])
+      mostLikesHashMap[blogs[i].author] = blogs[i].likes;
+    else mostLikesHashMap[blogs[i].author] += blogs[i].likes;
+
+    if (mostLikesHashMap[blogs[i].author] > mostLikedAuthor.likes)
+      mostLikedAuthor = {
+        author: blogs[i].author,
+        likes: mostLikesHashMap[blogs[i].author],
+      };
+  }
+
+  return mostLikedAuthor;
+};
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };

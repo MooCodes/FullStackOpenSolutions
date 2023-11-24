@@ -110,3 +110,15 @@ describe("most blogs", () => {
     expect(result).toEqual(shouldBe);
   });
 });
+
+describe("most liked author", () => {
+  let shouldBe = {
+    author: "Edsger W. Dijkstra",
+    likes: 17,
+  };
+
+  test("should return author with most liked", () => {
+    const result = listHelper.mostLikes(blogs);
+    expect(result).toEqual(shouldBe);
+  })
+});

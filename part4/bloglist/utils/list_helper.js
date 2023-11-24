@@ -26,8 +26,34 @@ const favoriteBlog = (blogs) => {
   return highestLikedBlog;
 };
 
+const mostBlogs = (blogs) => {
+  const mostBlogsHashMap = {};
+
+  let mostBlogsAuthor = {
+    author: "",
+    blogs: -1,
+  }
+
+  for (let i = 0; i < blogs.length; i++) {
+    // increment the # of blogs for this author
+    if (!mostBlogsHashMap[blogs[i].author])
+      mostBlogsHashMap[blogs[i].author] = 1;
+    else
+      mostBlogsHashMap[blogs[i].author] += 1;
+
+    if (mostBlogsHashMap[blogs[i].author] > mostBlogsAuthor.blogs) {
+      mostBlogsAuthor = {
+        author: blogs[i].author,
+        blogs: mostBlogsHashMap[blogs[i].author]
+      }
+    }
+  }
+  return mostBlogsAuthor;
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };

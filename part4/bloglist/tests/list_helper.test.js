@@ -87,13 +87,26 @@ describe("total likes", () => {
 });
 
 describe("favorite blog", () => {
-  shouldBe = {
+  let shouldBe = {
     title: "Canonical string reduction",
     author: "Edsger W. Dijkstra",
     likes: 12,
   };
+
   test("should return fav blog", () => {
     const result = listHelper.favoriteBlog(blogs);
+    expect(result).toEqual(shouldBe);
+  });
+});
+
+describe("most blogs", () => {
+  let shouldBe = {
+    author: "Robert C. Martin",
+    blogs: 3,
+  };
+
+  test("should return author with most blogs", () => {
+    const result = listHelper.mostBlogs(blogs);
     expect(result).toEqual(shouldBe);
   });
 });

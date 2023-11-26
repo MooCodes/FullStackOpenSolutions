@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const helper = require("./test_helper");
 const app = require("../app");
-
 const api = supertest(app);
 
 const Blog = require("../models/blog");
@@ -18,66 +17,83 @@ beforeEach(async () => {
   console.log("done");
 });
 
-test("notes are returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+describe("get tests", () => {
+  test("notes are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
+
+  test("there are six blogs", async () => {
+    const response = await api.get("/api/blogs");
+
+    expect(response.body).toHaveLength(6);
+  });
+
+  test("verify id property is defined", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const firstBlog = blogsAtStart[0];
+
+    expect(firstBlog._id).toBeDefined();
+  });
 });
 
-test("there are six blogs", async () => {
-  const response = await api.get("/api/blogs");
+describe("post tests", () => {
+  test("add a new blog", async () => {
+    const newBlog = {
+      title: "new blog test",
+      author: "Ali Baig",
+      url: "someRandomURL.com",
+      likes: 5,
+    };
 
-  expect(response.body).toHaveLength(6);
-});
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
 
-test("verify id property is defined", async () => {
-  const blogsAtStart = await helper.blogsInDb();
-  const firstBlog = blogsAtStart[0];
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
 
-  expect(firstBlog._id).toBeDefined();
-});
+    const titles = blogsAtEnd.map((blog) => blog.title);
+    expect(titles).toContain("new blog test");
+  });
 
-test("add a new blog", async () => {
-  const newBlog = {
-    title: "new blog test",
-    author: "Ali Baig",
-    url: "someRandomURL.com",
-    likes: 5,
-  };
+  test("likes property missing defaults to 0", async () => {
+    const newBlog = {
+      title: "new blog test",
+      author: "Ali Baig",
+      url: "someRandomURL.com",
+    };
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
 
-  const blogsAtEnd = await helper.blogsInDb();
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+    const blogsAtEnd = await helper.blogsInDb();
+    const missingLikesBlog = blogsAtEnd.find(
+      (blog) => blog.title === "new blog test"
+    );
 
-  const titles = blogsAtEnd.map((blog) => blog.title);
-  expect(titles).toContain("new blog test");
-});
+    expect(missingLikesBlog.likes).toBe(0);
+  });
 
-test("likes property missing defaults to 0", async () => {
-  const newBlog = {
-    title: "new blog test",
-    author: "Ali Baig",
-    url: "someRandomURL.com",
-  };
+  test("title or url properties missing", async () => {
+    const newBlog = {
+      author: "Ali Baig",
+      likes: 15,
+    };
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
+    await api.post("/api/blogs").send(newBlog).expect(400);
 
-  const blogsAtEnd = await helper.blogsInDb();
-  const missingLikesBlog = blogsAtEnd.find(
-    (blog) => blog.title === "new blog test"
-  );
+    const blogsAtEnd = await helper.blogsInDb();
 
-  expect(missingLikesBlog.likes).toBe(0);
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
 });
 
 afterAll(async () => {

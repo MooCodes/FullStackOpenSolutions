@@ -35,7 +35,7 @@ describe("get tests", () => {
     const blogsAtStart = await helper.blogsInDb();
     const firstBlog = blogsAtStart[0];
 
-    expect(firstBlog._id).toBeDefined();
+    expect(firstBlog.id).toBeDefined();
   });
 });
 
@@ -94,6 +94,25 @@ describe("post tests", () => {
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
+});
+
+describe("delete tests", () => {
+  test("delete a blog", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0];
+
+    console.log(blogToDelete);
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const title = blogsAtEnd.map(blog => blog.title);
+
+    expect(title).not.toContain(blogToDelete.title);
+  })
 });
 
 afterAll(async () => {

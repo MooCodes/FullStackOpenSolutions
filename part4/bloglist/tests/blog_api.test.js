@@ -109,10 +109,43 @@ describe("delete tests", () => {
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
 
-    const title = blogsAtEnd.map(blog => blog.title);
+    const title = blogsAtEnd.map((blog) => blog.title);
 
     expect(title).not.toContain(blogToDelete.title);
-  })
+  });
+});
+
+describe("put tests", () => {
+  test("update a blog", async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    let blogToUpdate = blogsAtStart.find(
+      (blog) => blog.title === "React patterns"
+    );
+
+    //console.log("before", blogToUpdate);
+
+    const bookEdit = {
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1,
+    };
+
+    // console.log(blogToUpdate.id);
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(bookEdit)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    //console.log("after", blogsAtEnd);
+    blogToUpdate = blogsAtEnd.find((blog) => blog.title === "React patterns");
+
+    expect(blogToUpdate.likes).toBe(8);
+  });
 });
 
 afterAll(async () => {

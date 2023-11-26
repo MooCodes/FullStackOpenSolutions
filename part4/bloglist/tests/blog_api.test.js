@@ -38,6 +38,27 @@ test("verify id property is defined", async () => {
   expect(firstBlog._id).toBeDefined();
 });
 
+test("add a new blog", async () => {
+  const newBlog = {
+    title: "new blog test",
+    author: "Ali Baig",
+    url: "someRandomURL.com",
+    likes: 5,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+  const titles = blogsAtEnd.map(blog => blog.title);
+  expect(titles).toContain("new blog test");
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

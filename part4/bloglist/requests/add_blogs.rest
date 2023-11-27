@@ -23,6 +23,18 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiY
 ###
 POST http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiYWlnIiwiaWQiOiI2NTY0ZWQzMmEwYmU0MWIyYTc2N2IwY2QiLCJpYXQiOjE3MDExMTkzOTR9.9-n8Yoafc6t9v4HNgKKog8YMLOZ_p9Y2yTFKbHosrD8
+
+{
+  "title": "authorized user blog post with middleware",
+  "author": "Baba Gee Tha Don",
+  "url": "randomestURLEver.com",
+  "likes": 7
+}
+
+###
+POST http://localhost:3003/api/blogs
+content-type: application/json
 Authorization: bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiYWlnIiwiaWQiOiI2NTY0ZWQzMmEwYmU0MWIyYTc2N2IwY2QiLCJpYXQiOjE3MDExMTkzOTR9.9-n8Yoafc6t9v4HNgKKog8YMLOZ_p9Y2yTFKbHosrD8
 
 {

@@ -122,12 +122,10 @@ describe("put tests", () => {
       (blog) => blog.title === "React patterns"
     );
 
-    //console.log("before", blogToUpdate);
+    console.log("before", blogToUpdate);
 
     const bookEdit = {
-      title: blogToUpdate.title,
-      author: blogToUpdate.author,
-      url: blogToUpdate.url,
+      ...blogToUpdate,
       likes: blogToUpdate.likes + 1,
     };
 
@@ -141,7 +139,7 @@ describe("put tests", () => {
 
     const blogsAtEnd = await helper.blogsInDb();
 
-    //console.log("after", blogsAtEnd);
+    console.log("after", blogsAtEnd);
     blogToUpdate = blogsAtEnd.find((blog) => blog.title === "React patterns");
 
     expect(blogToUpdate.likes).toBe(8);

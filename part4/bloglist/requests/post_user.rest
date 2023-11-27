@@ -7,3 +7,23 @@ Content-Type: application/json
   "name": "Ali Baig",
   "password": "hello"
 }
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "a",
+  "name": "Ali Baig",
+  "password": "h"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "aasdfe",
+  "name": "Ali Baig",
+  "password": "h"
+}

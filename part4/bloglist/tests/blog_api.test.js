@@ -148,6 +148,35 @@ describe("post tests", () => {
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
+
+  test("incorrect token when adding blog", async () => {
+    const newLogin = {
+      username: "root",
+      password: "sekret",
+    };
+
+    const loginRes = await api
+      .post("/api/login")
+      .send(newLogin)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const token = loginRes._body.token;
+
+    const newBlog = {
+      title: "new blog test",
+      author: "Ali Baig",
+      url: "someRandomURL.com",
+      likes: 5,
+    };
+
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `bearer df${token}`)
+      .send(newBlog)
+      .expect(401)
+      .expect("Content-Type", /application\/json/);
+  });
 });
 
 describe("delete tests", () => {

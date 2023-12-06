@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog }) => {
   const [showMore, setShowMore] = useState(false);
 
   const buttonText = !showMore ? "view" : "hide";
@@ -33,6 +33,7 @@ const Blog = ({ blog, updateBlog }) => {
         <br></br>
         {blog.user.name}
         <br></br>
+        <button onClick={() => removeBlog(blog.id)} >remove</button>
       </div>
     );
   };

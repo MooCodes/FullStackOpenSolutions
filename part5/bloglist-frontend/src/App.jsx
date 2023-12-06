@@ -116,6 +116,19 @@ const App = () => {
     setBlogs(filteredBlogs);
   };
 
+  const removeBlog = async (id) => {
+    if (window.confirm("Are you sure you want to remove this blog?")) {
+      const response = await blogService.remove(id);
+
+      const blogsFromAPI = await blogService.getAll();
+      const filteredBlogs = blogsFromAPI.filter(
+        (blog) => blog.user.username === user.username
+      );
+      console.log(filteredBlogs);
+      setBlogs(filteredBlogs);
+    }
+  };
+
   if (user === null) {
     if (msg !== null) {
       return (
@@ -192,7 +205,12 @@ const App = () => {
         <Blog key={blog.id} blog={blog} />
       ))} */}
       {blogsToShow.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateBlog={updateBlog}
+          removeBlog={removeBlog}
+        />
       ))}
     </div>
   );

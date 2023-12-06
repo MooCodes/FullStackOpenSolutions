@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [showMore, setShowMore] = useState(false);
 
   const buttonText = !showMore ? "view" : "hide";
@@ -13,15 +13,23 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   };
 
-  console.log(blog);
+  const handleLikeClick = () => {
+    const newBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+    };
+
+    updateBlog(blog.id, newBlog);
+  };
 
   const blogDetails = () => {
-    console.log("name:", blog)
     return (
       <div>
         {blog.url}
         <br></br>
-        {blog.likes} <button>like</button>
+        {blog.likes} <button onClick={handleLikeClick}>like</button>
         <br></br>
         {blog.user.name}
         <br></br>
@@ -31,7 +39,8 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} {blog.author} <button onClick={() => setShowMore(!showMore)}>{buttonText}</button>
+      {blog.title} {blog.author}{" "}
+      <button onClick={() => setShowMore(!showMore)}>{buttonText}</button>
       {showMore && blogDetails()}
     </div>
   );

@@ -88,9 +88,13 @@ const App = () => {
 
     const response = await blogService.create(blogObject);
     console.log("response", response);
-    const updatedBlogs = await blogService.getAll();
-    //const seperateBlog = blogs.concat(response)
-    setBlogs(updatedBlogs);
+
+    const blogsFromAPI = await blogService.getAll();
+    const filteredBlogs = blogsFromAPI.filter(
+      (blog) => blog.user.username === user.username
+    );
+    console.log(filteredBlogs);
+    setBlogs(filteredBlogs);
 
     setShowBlogForm(false);
 
@@ -99,6 +103,17 @@ const App = () => {
     setTimeout(() => {
       setMsg(null);
     }, 3000);
+  };
+
+  const updateBlog = async (id, blogObject) => {
+    const response = await blogService.update(id, blogObject);
+
+    const blogsFromAPI = await blogService.getAll();
+    const filteredBlogs = blogsFromAPI.filter(
+      (blog) => blog.user.username === user.username
+    );
+    console.log(filteredBlogs);
+    setBlogs(filteredBlogs);
   };
 
   if (user === null) {
@@ -162,21 +177,19 @@ const App = () => {
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
       <h2>create new</h2>
-      {!showBlogForm && 
+      {!showBlogForm && (
         <div>
-          <button onClick={() => setShowBlogForm(true)} >new blog</button>
+          <button onClick={() => setShowBlogForm(true)}>new blog</button>
         </div>
-      }
-      {showBlogForm && <BlogForm
-        createBlog={addBlog}
-        setShowBlogForm={setShowBlogForm}
-        />
-      }
+      )}
+      {showBlogForm && (
+        <BlogForm createBlog={addBlog} setShowBlogForm={setShowBlogForm} />
+      )}
       {/* {blogs.filter(blog => blog.user.username === user.username).map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))} */}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </div>
   );

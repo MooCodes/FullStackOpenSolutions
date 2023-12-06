@@ -103,6 +103,8 @@ const App = () => {
     setAuthor("");
     setUrl("");
 
+    setShowBlogForm(false);
+
     setMsg(newState);
 
     setTimeout(() => {

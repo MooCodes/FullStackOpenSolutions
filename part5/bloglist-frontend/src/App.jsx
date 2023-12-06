@@ -87,8 +87,10 @@ const App = () => {
     };
 
     const response = await blogService.create(blogObject);
+    console.log("response", response);
+    const updatedBlogs = await blogService.getAll();
     //const seperateBlog = blogs.concat(response)
-    setBlogs(blogs.concat(response));
+    setBlogs(updatedBlogs);
 
     setShowBlogForm(false);
 

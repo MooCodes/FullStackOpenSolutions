@@ -16,6 +16,7 @@ const Blog = ({ blog }) => {
   console.log(blog);
 
   const blogDetails = () => {
+    console.log("name:", blog)
     return (
       <div>
         {blog.url}

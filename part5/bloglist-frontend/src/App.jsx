@@ -10,10 +10,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-  const [msg, setMsg] = useState(null);
+  const [msg, setMsg] = useState("");
   const [showBlogForm, setShowBlogForm] = useState(false);
 
   const fetchBlogs = async () => {
@@ -83,25 +80,15 @@ const App = () => {
     }
   };
 
-  const handleAddBlog = async (e) => {
-    e.preventDefault();
-    const blogToAdd = {
-      title: title,
-      author: author,
-      url: url,
-    };
-
+  const addBlog = async (blogObject) => {
     const newState = {
-      msg: `a new blog ${title} by ${author}`,
+      msg: `a new blog ${blogObject.title} by ${blogObject.author}`,
       style: "success",
     };
 
-    const response = await blogService.create(blogToAdd);
+    const response = await blogService.create(blogObject);
     //const seperateBlog = blogs.concat(response)
     setBlogs(blogs.concat(response));
-    setTitle("");
-    setAuthor("");
-    setUrl("");
 
     setShowBlogForm(false);
 
@@ -179,13 +166,7 @@ const App = () => {
         </div>
       }
       {showBlogForm && <BlogForm
-        handleSubmit={handleAddBlog}
-        handleTitleChange={({ target }) => setTitle(target.value)}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        handleUrlChange={({ target }) => setUrl(target.value)}
-        title={title}
-        author={author}
-        url={url}
+        createBlog={addBlog}
         setShowBlogForm={setShowBlogForm}
         />
       }

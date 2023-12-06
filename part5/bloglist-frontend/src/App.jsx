@@ -169,6 +169,7 @@ const App = () => {
     }
   }
 
+  // 5.10
   const blogsToShow = blogs.sort((a, b) => b.likes - a.likes);
 
   return (

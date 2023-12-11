@@ -9,4 +9,34 @@ describe("Blog app", function () {
     cy.contains("password");
     cy.contains("login");
   });
+
+  describe("Login", function () {
+    beforeEach(function () {
+      // register test user
+      cy.request("POST", "http://localhost:3003/api/users", {
+        username: "abaig",
+        name: "Ali Baig",
+        password: "baba",
+      });
+    });
+
+    it("succeeds with correct credentials", function () {
+      cy.get("#username").type("abaig");
+      cy.get("#password").type("baba");
+      cy.get("#login-button").click();
+
+      // cy.login({ username: "abaig", password: "baba" });
+
+      cy.contains("Ali Baig logged in");
+    });
+
+    it("fails with wrong credentials", function () {
+      cy.get("#username").type("abaig");
+      cy.get("#password").type("ba");
+      cy.get("#login-button").click();
+
+      cy.contains("wrong username or password");
+      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+    });
+  });
 });

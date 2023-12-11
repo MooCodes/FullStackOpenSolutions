@@ -41,7 +41,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   return (
     <div className="blog" style={blogStyle}>
       {blog.title} {blog.author}{" "}
-      <button onClick={() => setShowMore(!showMore)}>{buttonText}</button>
+      <button id="showDetails" onClick={() => setShowMore(!showMore)}>{buttonText}</button>
       {showMore && blogDetails()}
     </div>
   );

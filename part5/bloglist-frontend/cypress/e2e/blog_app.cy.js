@@ -55,4 +55,22 @@ describe("Blog app", function () {
       cy.contains("a new blog");
     });
   });
+
+  describe("When logged in, like and delete a blog", function () {
+    beforeEach(function () {
+      cy.login({ username: "abaig", password: "baba" });
+      cy.createBlog({
+        title: "some title",
+        author: "some author",
+        url: "some url",
+      });
+    });
+
+    it("A blog can be liked", function() {
+      cy.get("#showDetails").click();
+      cy.get("#likeButton").click();
+
+      cy.contains(1);
+    })
+  });
 });

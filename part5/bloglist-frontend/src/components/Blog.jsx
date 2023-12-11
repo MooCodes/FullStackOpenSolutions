@@ -5,6 +5,12 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const buttonText = !showMore ? "view" : "hide";
 
+  const showRemoveButton =
+    blog.user.username ==
+    JSON.parse(window.localStorage.getItem("loggedBlogappUser")).username
+      ? true
+      : false;
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -24,16 +30,28 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
     updateBlog(blog.id, newBlog);
   };
 
+  const removeButton = () => {
+    return (
+      <div>
+        <button id="removeButton" onClick={() => removeBlog(blog.id)}>
+          remove
+        </button>
+      </div>
+    );
+  };
+
   const blogDetails = () => {
     return (
       <div>
         {blog.url}
         <br></br>
-        {blog.likes} <button id="likeButton" onClick={handleLikeClick}>like</button>
+        {blog.likes}{" "}
+        <button id="likeButton" onClick={handleLikeClick}>
+          like
+        </button>
         <br></br>
         {blog.user.name}
-        <br></br>
-        <button id="removeButton" onClick={() => removeBlog(blog.id)} >remove</button>
+        {showRemoveButton && removeButton()}
       </div>
     );
   };
@@ -41,7 +59,9 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   return (
     <div className="blog" style={blogStyle}>
       {blog.title} {blog.author}{" "}
-      <button id="showDetails" onClick={() => setShowMore(!showMore)}>{buttonText}</button>
+      <button id="showDetails" onClick={() => setShowMore(!showMore)}>
+        {buttonText}
+      </button>
       {showMore && blogDetails()}
     </div>
   );

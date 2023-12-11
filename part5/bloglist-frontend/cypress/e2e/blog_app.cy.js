@@ -73,11 +73,48 @@ describe("Blog app", function () {
       cy.contains(1);
     });
 
-    it.only("A blog can be deleted", function () {
+    it("A blog can be deleted", function () {
       cy.get("#showDetails").click();
       cy.get("#removeButton").click();
 
       cy.get("html").should("not.contain", "some title");
+    });
+
+    it("Only the creater can see the delete button of blog", function () {
+      cy.get("#showDetails").click();
+      cy.contains("remove");
+    });
+  });
+
+  describe("blogs from multiple users", function () {
+    beforeEach(function () {
+      cy.login({ username: "abaig", password: "baba" });
+      cy.createBlog({
+        title: "some title",
+        author: "some author",
+        url: "some url",
+      });
+
+      window.localStorage.removeItem("loggedBlogappUser"); // logout
+
+      // create 2nd user to make blog
+      cy.request("POST", "http://localhost:3003/api/users", {
+        username: "sec",
+        name: "Ali Baigya",
+        password: "baba",
+      });
+
+      cy.login({ username: "sec", password: "baba" });
+      cy.createBlog({
+        title: "another title",
+        author: "another author",
+        url: "another url",
+      });
+    });
+
+    it("creater of blog should be the only one to see delete button", function () {
+      cy.get("#showDetails").click();
+      cy.get(".blog").eq(0).should("not.contain", "remove");
     });
   });
 });

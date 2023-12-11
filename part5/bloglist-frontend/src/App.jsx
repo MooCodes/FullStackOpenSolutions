@@ -21,11 +21,11 @@ const App = () => {
       setUser(user);
       blogService.setToken(user.token);
       const blogsFromAPI = await blogService.getAll();
-      const filteredBlogs = blogsFromAPI.filter(
-        (blog) => blog.user.username === user.username
-      );
-      console.log(filteredBlogs);
-      setBlogs(filteredBlogs);
+      // const filteredBlogs = blogsFromAPI.filter(
+      //   (blog) => blog.user.username === user.username
+      // );
+      // console.log(filteredBlogs);
+      setBlogs(blogsFromAPI);
     }
   };
 
@@ -46,11 +46,12 @@ const App = () => {
       blogService.setToken(user.token);
 
       const blogsFromAPI = await blogService.getAll();
-      const filteredBlogs = blogsFromAPI.filter(
-        (blog) => blog.user.username === user.username
-      );
-      console.log(filteredBlogs);
-      setBlogs(filteredBlogs);
+      // const filteredBlogs = blogsFromAPI.filter(
+      //   (blog) => blog.user.username === user.username
+      // );
+      // console.log(filteredBlogs);
+      // setBlogs(filteredBlogs);
+      setBlogs(blogsFromAPI);
 
       setUser(user);
       setUsername("");
@@ -90,11 +91,11 @@ const App = () => {
     console.log("response", response);
 
     const blogsFromAPI = await blogService.getAll();
-    const filteredBlogs = blogsFromAPI.filter(
-      (blog) => blog.user.username === user.username
-    );
-    console.log(filteredBlogs);
-    setBlogs(filteredBlogs);
+    // const filteredBlogs = blogsFromAPI.filter(
+    //   (blog) => blog.user.username === user.username
+    // );
+    // console.log(filteredBlogs);
+    setBlogs(blogsFromAPI);
 
     setShowBlogForm(false);
 
@@ -109,11 +110,12 @@ const App = () => {
     const response = await blogService.update(id, blogObject);
 
     const blogsFromAPI = await blogService.getAll();
-    const filteredBlogs = blogsFromAPI.filter(
-      (blog) => blog.user.username === user.username
-    );
-    console.log(filteredBlogs);
-    setBlogs(filteredBlogs);
+    // const filteredBlogs = blogsFromAPI.filter(
+    //   (blog) => blog.user.username === user.username
+    // );
+    // console.log(filteredBlogs);
+    // setBlogs(filteredBlogs);
+    setBlogs(blogsFromAPI);
   };
 
   const removeBlog = async (id) => {
@@ -121,11 +123,12 @@ const App = () => {
       const response = await blogService.remove(id);
 
       const blogsFromAPI = await blogService.getAll();
-      const filteredBlogs = blogsFromAPI.filter(
-        (blog) => blog.user.username === user.username
-      );
-      console.log(filteredBlogs);
-      setBlogs(filteredBlogs);
+      // const filteredBlogs = blogsFromAPI.filter(
+      //   (blog) => blog.user.username === user.username
+      // );
+      // console.log(filteredBlogs);
+      // setBlogs(filteredBlogs);
+      setBlogs(blogsFromAPI);
     }
   };
 
@@ -154,7 +157,9 @@ const App = () => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button id="login-button" type="submit">login</button>
+          <button id="login-button" type="submit">
+            login
+          </button>
         </form>
       );
     } else {
@@ -180,7 +185,9 @@ const App = () => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button id="login-button" type="submit">login</button>
+          <button id="login-button" type="submit">
+            login
+          </button>
         </form>
       );
     }

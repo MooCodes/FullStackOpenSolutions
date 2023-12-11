@@ -27,6 +27,8 @@ const BlogForm = ({ createBlog, setShowBlogForm }) => {
         value={title}
         name="title"
         onChange={(e) => setTitle(e.target.value)}
+        placeholder="write title here"
+        title="blogTitle"
       />
       <br></br>
       author:
@@ -35,6 +37,8 @@ const BlogForm = ({ createBlog, setShowBlogForm }) => {
         value={author}
         name="author"
         onChange={(e) => setAuthor(e.target.value)}
+        placeholder="write author here"
+        id="blogAuthor"
       />
       <br></br>
       url:
@@ -43,11 +47,17 @@ const BlogForm = ({ createBlog, setShowBlogForm }) => {
         value={url}
         name="url"
         onChange={(e) => setUrl(e.target.value)}
+        placeholder="write url here"
+        id="blogUrl"
       />
       <br></br>
       <button type="submit">create</button>
       <br></br>
-      <button type="button" onClick={() => setShowBlogForm(false)}>
+      <button
+        id="submitBlog"
+        type="button"
+        onClick={() => setShowBlogForm(false)}
+      >
         cancel
       </button>
     </form>

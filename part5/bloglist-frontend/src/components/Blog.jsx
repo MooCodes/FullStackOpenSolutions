@@ -25,7 +25,10 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
+      user: blog.user
     };
+
+    console.log(newBlog);
 
     updateBlog(blog.id, newBlog);
   };

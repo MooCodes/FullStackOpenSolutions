@@ -110,11 +110,36 @@ describe("Blog app", function () {
         author: "another author",
         url: "another url",
       });
+
+      cy.createBlog({
+        title: "third t",
+        author: "third a",
+        url: "third u",
+      });
     });
 
     it("creater of blog should be the only one to see delete button", function () {
       cy.get("#showDetails").click();
       cy.get(".blog").eq(0).should("not.contain", "remove");
+    });
+
+    it.only("blogs are ordered by likes", function () {
+      cy.get("#showDetails").click();
+
+      for (let i = 0; i < 3; i++) {
+        cy.get("#likeButton").click();
+        cy.wait(500);
+      }
+
+      cy.get("#showDetails").click();
+      cy.get("#showDetails").eq(0);
+      cy.get(".blog").find("#showDetails").eq(1).click();
+      for (let i = 0; i < 5; i++) {
+        cy.get(".blog").find("#showDetails").eq(1).get("#likeButton").click();
+        cy.wait(500);
+      }
+
+      cy.get(".blog").eq(0).should("contain", "another title");
     });
   });
 });

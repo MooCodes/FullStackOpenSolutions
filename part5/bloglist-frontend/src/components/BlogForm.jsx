@@ -28,7 +28,7 @@ const BlogForm = ({ createBlog, setShowBlogForm }) => {
         name="title"
         onChange={(e) => setTitle(e.target.value)}
         placeholder="write title here"
-        title="blogTitle"
+        id="blogTitle"
       />
       <br></br>
       author:
@@ -51,10 +51,9 @@ const BlogForm = ({ createBlog, setShowBlogForm }) => {
         id="blogUrl"
       />
       <br></br>
-      <button type="submit">create</button>
+      <button id="submitBlog" type="submit">create</button>
       <br></br>
       <button
-        id="submitBlog"
         type="button"
         onClick={() => setShowBlogForm(false)}
       >

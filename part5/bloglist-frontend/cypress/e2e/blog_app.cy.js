@@ -66,11 +66,18 @@ describe("Blog app", function () {
       });
     });
 
-    it("A blog can be liked", function() {
+    it("A blog can be liked", function () {
       cy.get("#showDetails").click();
       cy.get("#likeButton").click();
 
       cy.contains(1);
-    })
+    });
+
+    it.only("A blog can be deleted", function () {
+      cy.get("#showDetails").click();
+      cy.get("#removeButton").click();
+
+      cy.get("html").should("not.contain", "some title");
+    });
   });
 });

@@ -16,14 +16,14 @@ const App = () => {
   return (
     <div>
       <button onClick={good}>good</button>
-      <button>ok</button>
-      <button>bad</button>
-      <button>
+      <button onClick={() => store.dispatch({ type: "OK" })}>ok</button>
+      <button onClick={() => store.dispatch({ type: "BAD" })}>bad</button>
+      <button onClick={() => store.dispatch({ type: "ZERO" })}>
         reset stats
       </button>
-      <div>good</div>
-      <div>ok</div>
-      <div>bad</div>
+      <div>good {store.getState().good}</div>
+      <div>ok {store.getState().ok}</div>
+      <div>bad {store.getState().bad}</div>
     </div>
   );
 };

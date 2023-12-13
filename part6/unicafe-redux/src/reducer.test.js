@@ -63,4 +63,5 @@ describe("unicafe reducer", () => {
       ok: 0,
       bad: 1,
     });
+  });
 });

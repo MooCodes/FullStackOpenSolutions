@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { voteFor, createAnecdote } from "./reducers/anecdoteReducer";
 
 const App = () => {
   const anecdotes = useSelector((state) => state);
@@ -7,19 +8,13 @@ const App = () => {
   const vote = (id) => {
     console.log("vote", id);
 
-    dispatch({
-      type: "VOTE",
-      payload: { id },
-    });
+    dispatch(voteFor(id));
   };
 
   const addAnecdote = (e) => {
     e.preventDefault();
     console.log(e.target.anecdote.value);
-    dispatch({
-      type: "ADD",
-      payload: { anecdote: e.target.anecdote.value },
-    });
+    dispatch(createAnecdote(e.target.anecdote.value));
   };
 
   const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes);

@@ -13,8 +13,6 @@ const App = () => {
     });
   };
 
-  console.log("re rendering");
-
   const addAnecdote = (e) => {
     e.preventDefault();
     console.log(e.target.anecdote.value);
@@ -24,10 +22,12 @@ const App = () => {
     });
   };
 
+  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes);
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map((anecdote) => (
+      {sortedAnecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>

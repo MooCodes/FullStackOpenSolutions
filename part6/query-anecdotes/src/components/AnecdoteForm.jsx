@@ -12,6 +12,19 @@ const AnecdoteForm = () => {
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData(["anecdotes"]);
       queryClient.setQueryData(["anecdotes"], anecdotes.concat(newAnecdote));
+
+      notificationMsgDispatch({ type: "ADDED", payload: newAnecdote.content});
+      setTimeout(() => {
+        notificationMsgDispatch({ type: "" });
+      }, 3000);
+    },
+    onError: (err) => {
+      console.log(err);
+
+      notificationMsgDispatch({ type: "ERROR", payload: err.message });
+      setTimeout(() => {
+        notificationMsgDispatch({ type: "" });
+      }, 3000);
     },
   });
 
@@ -20,13 +33,8 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value;
     event.target.anecdote.value = "";
     console.log("new anecdote");
-    if (content.length >= 5) {
-      notificationMsgDispatch({ type: "ADDED", payload: content });
-      setTimeout(() => {
-        notificationMsgDispatch({ type: "" });
-      }, 3000);
-      mutation.mutate({ content: content, votes: 0 });
-    }
+
+    mutation.mutate({ content: content, votes: 0 });
   };
 
   return (

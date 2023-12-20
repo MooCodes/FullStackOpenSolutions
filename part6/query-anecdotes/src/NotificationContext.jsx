@@ -8,7 +8,7 @@ const notificationReducer = (state, action) => {
     case "VOTE":
       return "Voted for " + action.payload;
     case "ERROR":
-      return "Got an error";
+      return action.payload;
     default:
       return "";
   }

@@ -12,12 +12,14 @@ const App = () => {
   const query = useQuery({
     queryKey: ["anecdotes"],
     queryFn: getAnecdotes,
-    retry: false
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 
   if (query.isLoading) return <div>API fetch is loading...</div>;
 
-  if (query.isError) return <div>anecdote service not available due to problems in server</div>
+  if (query.isError)
+    return <div>anecdote service not available due to problems in server</div>;
 
   const anecdotes = query.data;
 

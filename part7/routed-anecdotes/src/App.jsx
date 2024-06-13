@@ -9,6 +9,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import { useField } from "./hooks";
+
 const Menu = ({ anecdotes, addNew, notification }) => {
   const padding = {
     paddingRight: 5,
@@ -117,18 +119,19 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [info, setInfo] = useState("");
+  const content = useField("text");
+  const author = useField("text");
+  const info = useField("text");
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(content.value, author.value, info.value);
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     });
     navigate("/");
@@ -142,24 +145,24 @@ const CreateNew = (props) => {
           content
           <input
             name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={content.value}
+            onChange={(e) => content.onChange(e)}
           />
         </div>
         <div>
           author
           <input
             name="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={author.value}
+            onChange={(e) => author.onChange(e)}
           />
         </div>
         <div>
           url for more info
           <input
             name="info"
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
+            value={info.value}
+            onChange={(e) => info.onChange(e)}
           />
         </div>
         <button>create</button>
@@ -189,6 +192,7 @@ const App = () => {
   const [notification, setNotification] = useState("");
 
   const addNew = (anecdote) => {
+    console.log(anecdote);
     anecdote.id = Math.round(Math.random() * 10000);
     setAnecdotes(anecdotes.concat(anecdote));
     setNotification(`a new anecdote "${anecdote.content}" created!`);

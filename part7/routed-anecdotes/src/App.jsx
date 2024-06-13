@@ -143,33 +143,30 @@ const CreateNew = (props) => {
     info.reset();
   };
 
+  const getSpread = (obj) => {
+    const { reset, ...spread } = obj;
+    return spread;
+  };
+
+  const contentObj = getSpread(content);
+  const authorObj = getSpread(author);
+  const infoObj = getSpread(info);
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            name="content"
-            value={content.value}
-            onChange={(e) => content.onChange(e)}
-          />
+          <input {...contentObj} />
         </div>
         <div>
           author
-          <input
-            name="author"
-            value={author.value}
-            onChange={(e) => author.onChange(e)}
-          />
+          <input {...authorObj} />
         </div>
         <div>
           url for more info
-          <input
-            name="info"
-            value={info.value}
-            onChange={(e) => info.onChange(e)}
-          />
+          <input {...infoObj} />
         </div>
         <button type="submit">create</button>
         <button type="button" onClick={handleReset}>

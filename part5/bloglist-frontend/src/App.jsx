@@ -5,16 +5,17 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { useSelector, useDispatch } from "react-redux";
 import { setMsg, reset } from "./reducers/msgReducer";
+import { setBlogs, appendBlog } from "./reducers/blogReducer";
 import "./App.css";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [showBlogForm, setShowBlogForm] = useState(false);
 
   const msg = useSelector((state) => state.msg);
+  const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
 
   const fetchBlogs = async () => {
@@ -29,7 +30,7 @@ const App = () => {
       //   (blog) => blog.user.username === user.username
       // );
       // console.log(filteredBlogs);
-      setBlogs(blogsFromAPI);
+      dispatch(setBlogs(blogsFromAPI));
     }
   };
 
@@ -95,11 +96,8 @@ const App = () => {
     console.log("response", response);
 
     const blogsFromAPI = await blogService.getAll();
-    // const filteredBlogs = blogsFromAPI.filter(
-    //   (blog) => blog.user.username === user.username
-    // );
-    // console.log(filteredBlogs);
-    setBlogs(blogsFromAPI);
+
+    dispatch(appendBlog(response));
 
     setShowBlogForm(false);
 
@@ -198,7 +196,8 @@ const App = () => {
   }
 
   // 5.10
-  const blogsToShow = blogs.sort((a, b) => b.likes - a.likes);
+  const blogsToShow = [...blogs];
+  blogsToShow.sort((a, b) => b.likes - a.likes);
 
   return (
     <div>

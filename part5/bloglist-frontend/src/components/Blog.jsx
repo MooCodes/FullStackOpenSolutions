@@ -1,11 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-const Blog = ({ blog, updateBlog, removeBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog, showDetails }) => {
   const [showMore, setShowMore] = useState(false);
 
   const buttonText = !showMore ? "view" : "hide";
-
-  console.log(blog.user);
 
   const showRemoveButton =
     blog.user.username ==
@@ -48,26 +47,29 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
   const blogDetails = () => {
     return (
       <div>
-        {blog.url}
+        {blog.url} by {blog.author}
         <br></br>
-        {blog.likes}{" "}
+        {blog.likes}
+        {" likes "}
         <button id="likeButton" onClick={handleLikeClick}>
           like
         </button>
         <br></br>
-        {blog.user.name}
+        added by {blog.user.name}
         {showRemoveButton && removeButton()}
       </div>
     );
   };
 
+  if (showDetails) {
+    return blogDetails();
+  }
+
   return (
     <div className="blog" style={blogStyle}>
-      {blog.title} {blog.author}{" "}
-      <button id="showDetails" onClick={() => setShowMore(!showMore)}>
-        {buttonText}
-      </button>
-      {showMore && blogDetails()}
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title} by {blog.author}
+      </Link>
     </div>
   );
 };

@@ -112,7 +112,9 @@ const App = () => {
     const response = await blogService.create(blogObject);
     console.log("response", response);
 
-    dispatch(appendBlog(response));
+    const blogsFromAPI = await blogService.getAll();
+
+    dispatch(setBlogs(blogsFromAPI));
 
     setShowBlogForm(false);
 
@@ -214,6 +216,20 @@ const App = () => {
   const blogsToShow = [...blogs];
   blogsToShow.sort((a, b) => b.likes - a.likes);
 
+  const BlogInfo = () => {
+    const { id } = useParams();
+    const blogToFind = blogs.find((blog) => blog.id === id);
+    if (!blogToFind) return null;
+    return (
+      <Blog
+        blog={blogToFind}
+        updateBlog={updateBlog}
+        removeBlog={removeBlog}
+        showDetails={true}
+      />
+    );
+  };
+
   const Menu = () => {
     return (
       <Router>
@@ -221,6 +237,7 @@ const App = () => {
           <Route path="/" element={<BlogList />}></Route>
           <Route path="/users" element={<UsersList />}></Route>
           <Route path="/users/:id" element={<UserInfo />}></Route>
+          <Route path="/blogs/:id" element={<BlogInfo />}></Route>
         </Routes>
       </Router>
     );
@@ -282,10 +299,7 @@ const App = () => {
         {showBlogForm && (
           <BlogForm createBlog={addBlog} setShowBlogForm={setShowBlogForm} />
         )}
-        {/* {blogs.filter(blog => blog.user.username === user.username).map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))} */}
-        {blogsToShow.map((blog) => (
+        {blogs.map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}

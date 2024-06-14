@@ -3,10 +3,12 @@ import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import userService from "./services/users";
 import { useSelector, useDispatch } from "react-redux";
 import { setMsg, reset } from "./reducers/msgReducer";
 import { setBlogs, appendBlog } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
+import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
@@ -198,6 +200,73 @@ const App = () => {
   const blogsToShow = [...blogs];
   blogsToShow.sort((a, b) => b.likes - a.likes);
 
+  const Menu = () => {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/" element={<BlogList />}></Route>
+          <Route path="/users" element={<UsersList />}></Route>
+        </Routes>
+      </Router>
+    );
+  };
+
+  const UsersList = () => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+      userService.getAll().then((users) => {
+        setUsers(users);
+      });
+    }, []);
+    return (
+      <div>
+        <h2>Users</h2>
+        <table width={"25%"}>
+          <tbody>
+            <tr>
+              <th></th>
+              <th style={{ textAlign: "left" }}>blogs created</th>
+            </tr>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.blogs.length}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const BlogList = () => {
+    return (
+      <>
+        <h2>create new</h2>
+        {!showBlogForm && (
+          <div>
+            <button onClick={() => setShowBlogForm(true)}>new blog</button>
+          </div>
+        )}
+        {showBlogForm && (
+          <BlogForm createBlog={addBlog} setShowBlogForm={setShowBlogForm} />
+        )}
+        {/* {blogs.filter(blog => blog.user.username === user.username).map((blog) => (
+        <Blog key={blog.id} blog={blog} />
+      ))} */}
+        {blogsToShow.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
+          />
+        ))}
+      </>
+    );
+  };
+
   return (
     <div>
       <h2>blogs</h2>
@@ -205,26 +274,7 @@ const App = () => {
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
-      <h2>create new</h2>
-      {!showBlogForm && (
-        <div>
-          <button onClick={() => setShowBlogForm(true)}>new blog</button>
-        </div>
-      )}
-      {showBlogForm && (
-        <BlogForm createBlog={addBlog} setShowBlogForm={setShowBlogForm} />
-      )}
-      {/* {blogs.filter(blog => blog.user.username === user.username).map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))} */}
-      {blogsToShow.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          updateBlog={updateBlog}
-          removeBlog={removeBlog}
-        />
-      ))}
+      {Menu()}
     </div>
   );
 };

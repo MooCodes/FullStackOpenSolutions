@@ -5,6 +5,8 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
 
   const buttonText = !showMore ? "view" : "hide";
 
+  console.log(blog.user);
+
   const showRemoveButton =
     blog.user.username ==
     JSON.parse(window.localStorage.getItem("loggedBlogappUser")).username
@@ -25,7 +27,7 @@ const Blog = ({ blog, updateBlog, removeBlog }) => {
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-      user: blog.user
+      user: blog.user,
     };
 
     console.log(newBlog);

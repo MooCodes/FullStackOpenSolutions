@@ -8,13 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setMsg, reset } from "./reducers/msgReducer";
 import { setBlogs, appendBlog } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Routes,
-  useParams,
-} from "react-router-dom";
+import { Link, Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
@@ -212,6 +206,30 @@ const App = () => {
     }
   }
 
+  // user exists!
+
+  const Navbar = () => {
+    const liStyle = { display: "inline", marginRight: 10 };
+    return (
+      <nav style={{ backgroundColor: "grey" }}>
+        <ul style={{ margin: 0, padding: 0 }}>
+          <li style={liStyle}>
+            <Link to="/">blogs</Link>
+          </li>
+          <li style={liStyle}>
+            <Link to="/users">users</Link>
+          </li>
+          <li style={liStyle}>
+            {user.name} logged in
+            <button id="logout-button" onClick={handleLogout}>
+              logout
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
+
   // 5.10
   const blogsToShow = [...blogs];
   blogsToShow.sort((a, b) => b.likes - a.likes);
@@ -232,14 +250,12 @@ const App = () => {
 
   const Menu = () => {
     return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<BlogList />}></Route>
-          <Route path="/users" element={<UsersList />}></Route>
-          <Route path="/users/:id" element={<UserInfo />}></Route>
-          <Route path="/blogs/:id" element={<BlogInfo />}></Route>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/" element={<BlogList />}></Route>
+        <Route path="/users" element={<UsersList />}></Route>
+        <Route path="/users/:id" element={<UserInfo />}></Route>
+        <Route path="/blogs/:id" element={<BlogInfo />}></Route>
+      </Routes>
     );
   };
 
@@ -313,6 +329,7 @@ const App = () => {
 
   return (
     <div>
+      <Navbar />
       <h2>blogs</h2>
       {msg !== null && <div className={msg.style}>{msg.msg}</div>}
       <p>

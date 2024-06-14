@@ -8,13 +8,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { setMsg, reset } from "./reducers/msgReducer";
 import { setBlogs, appendBlog } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
-import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Link,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import "./App.css";
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showBlogForm, setShowBlogForm] = useState(false);
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    userService.getAll().then((users) => {
+      setUsers(users);
+    });
+  }, []);
 
   const msg = useSelector((state) => state.msg);
   const blogs = useSelector((state) => state.blogs);
@@ -206,19 +220,33 @@ const App = () => {
         <Routes>
           <Route path="/" element={<BlogList />}></Route>
           <Route path="/users" element={<UsersList />}></Route>
+          <Route path="/users/:id" element={<UserInfo />}></Route>
         </Routes>
       </Router>
     );
   };
 
-  const UsersList = () => {
-    const [users, setUsers] = useState([]);
+  const UserInfo = () => {
+    const { id } = useParams();
 
-    useEffect(() => {
-      userService.getAll().then((users) => {
-        setUsers(users);
-      });
-    }, []);
+    const userToFind = users.find((user) => user.id === id);
+    if (!userToFind) return null;
+    const userBlogs = blogs.filter((blog) => blog.user.id === id);
+
+    return (
+      <div>
+        <h2>{userToFind.name}</h2>
+        <h3>added blogs</h3>
+        <ul>
+          {userBlogs.map((blog) => (
+            <li key={blog.id}>{blog.title}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  const UsersList = () => {
     return (
       <div>
         <h2>Users</h2>
@@ -230,7 +258,9 @@ const App = () => {
             </tr>
             {users.map((user) => (
               <tr key={user.id}>
-                <td>{user.name}</td>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </td>
                 <td>{user.blogs.length}</td>
               </tr>
             ))}

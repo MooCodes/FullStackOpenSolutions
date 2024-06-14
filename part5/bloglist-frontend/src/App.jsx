@@ -6,25 +6,26 @@ import loginService from "./services/login";
 import { useSelector, useDispatch } from "react-redux";
 import { setMsg, reset } from "./reducers/msgReducer";
 import { setBlogs, appendBlog } from "./reducers/blogReducer";
+import { setUser } from "./reducers/userReducer";
 import "./App.css";
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const [showBlogForm, setShowBlogForm] = useState(false);
 
   const msg = useSelector((state) => state.msg);
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const fetchBlogs = async () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     console.log(loggedUserJSON);
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const userObj = JSON.parse(loggedUserJSON);
+      dispatch(setUser(userObj));
+      blogService.setToken(userObj.token);
       const blogsFromAPI = await blogService.getAll();
       // const filteredBlogs = blogsFromAPI.filter(
       //   (blog) => blog.user.username === user.username
@@ -58,7 +59,7 @@ const App = () => {
       // setBlogs(filteredBlogs);
       setBlogs(blogsFromAPI);
 
-      setUser(user);
+      dispatch(setUser(user));
       setUsername("");
       setPassword("");
     } catch (exception) {
@@ -82,7 +83,7 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       window.localStorage.removeItem("loggedBlogappUser");
-      setUser(null);
+      dispatch(setUser(null));
     }
   };
 

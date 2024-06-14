@@ -3,6 +3,8 @@ import Blog from "./components/Blog";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import { useSelector, useDispatch } from "react-redux";
+import { setMsg, reset } from "./reducers/msgReducer";
 import "./App.css";
 
 const App = () => {
@@ -10,8 +12,10 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [msg, setMsg] = useState("");
   const [showBlogForm, setShowBlogForm] = useState(false);
+
+  const msg = useSelector((state) => state.msg);
+  const dispatch = useDispatch();
 
   const fetchBlogs = async () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -64,10 +68,10 @@ const App = () => {
         style: "error",
       };
 
-      setMsg(newState);
+      dispatch(setMsg(newState));
 
       setTimeout(() => {
-        setMsg(null);
+        dispatch(reset());
       }, 3000);
     }
   };
@@ -99,10 +103,10 @@ const App = () => {
 
     setShowBlogForm(false);
 
-    setMsg(newState);
+    dispatch(setMsg(newState));
 
     setTimeout(() => {
-      setMsg(null);
+      dispatch(reset());
     }, 3000);
   };
 

@@ -95,8 +95,6 @@ const App = () => {
     const response = await blogService.create(blogObject);
     console.log("response", response);
 
-    const blogsFromAPI = await blogService.getAll();
-
     dispatch(appendBlog(response));
 
     setShowBlogForm(false);
@@ -117,7 +115,7 @@ const App = () => {
     // );
     // console.log(filteredBlogs);
     // setBlogs(filteredBlogs);
-    setBlogs(blogsFromAPI);
+    dispatch(setBlogs(blogsFromAPI));
   };
 
   const removeBlog = async (id) => {
@@ -130,7 +128,7 @@ const App = () => {
       // );
       // console.log(filteredBlogs);
       // setBlogs(filteredBlogs);
-      setBlogs(blogsFromAPI);
+      dispatch(setBlogs(blogsFromAPI));
     }
   };
 

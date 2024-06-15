@@ -131,6 +131,13 @@ const App = () => {
     dispatch(setBlogs(blogsFromAPI));
   };
 
+  const addComment = async (id, comment) => {
+    const response = await blogService.addComment(id, comment);
+    const blogsFromAPI = await blogService.getAll();
+
+    dispatch(setBlogs(blogsFromAPI));
+  };
+
   const removeBlog = async (id) => {
     if (window.confirm("Are you sure you want to remove this blog?")) {
       const response = await blogService.remove(id);
@@ -243,6 +250,7 @@ const App = () => {
         blog={blogToFind}
         updateBlog={updateBlog}
         removeBlog={removeBlog}
+        addComment={addComment}
         showDetails={true}
       />
     );

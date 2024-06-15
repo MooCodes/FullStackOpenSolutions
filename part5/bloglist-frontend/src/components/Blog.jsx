@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Blog = ({ blog, updateBlog, removeBlog, showDetails }) => {
+const Blog = ({ blog, updateBlog, removeBlog, showDetails, addComment }) => {
   const [showMore, setShowMore] = useState(false);
+  const [comment, setComment] = useState("");
 
   const buttonText = !showMore ? "view" : "hide";
 
@@ -59,6 +60,19 @@ const Blog = ({ blog, updateBlog, removeBlog, showDetails }) => {
         {showRemoveButton && removeButton()}
         <h2>comments</h2>
         <div>
+          <input
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          ></input>{" "}
+          <button
+            onClick={() => {
+              console.log(comment);
+              addComment(blog.id, comment);
+              setComment("");
+            }}
+          >
+            add comment
+          </button>
           {blog.comments.map((comment) => (
             <li key={comment}>{comment}</li>
           ))}

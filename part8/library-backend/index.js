@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require("uuid");
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 
@@ -119,6 +120,15 @@ const typeDefs = `
     allBooks(name: String, genre: String): [Book!]!
     allAuthors: [Author]!
   }
+  
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int
+      author: String!
+      genres: [String!]
+    ): Book
+  }
 `;
 
 const resolvers = {
@@ -147,6 +157,18 @@ const resolvers = {
   Author: {
     bookCount: (root) => {
       return books.filter((book) => book.author === root.name).length;
+    },
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      // if the author doesn't exist, add them
+      if (!authors.find((a) => a.name === args.author)) {
+        authors = authors.concat({ name: args.author, id: authors.length + 1 });
+      }
+
+      const newBook = { ...args, id: books.length + 1 };
+      books = books.concat(newBook);
+      return newBook;
     },
   },
 };

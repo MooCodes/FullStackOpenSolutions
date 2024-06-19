@@ -17,6 +17,7 @@ const Menu = ({ anecdotes, addNew, notification }) => {
   };
 
   const match = useMatch("/anecdotes/:id");
+  console.log(match);
   const anecdote = match
     ? anecdotes.find((a) => a.id === Number(match.params.id))
     : null;

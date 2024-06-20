@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 const Book = require("./models/book");
 const Author = require("./models/author");
+const { GraphQLError } = require("graphql");
 
 require("dotenv").config();
 
@@ -177,7 +178,9 @@ const resolvers = {
       // check if there's an author that exists
       const author = await Author.findOne({ name: args.author });
 
-      const book = new Book({
+      let book;
+
+      book = new Book({
         title: args.title,
         published: args.published,
         genres: args.genres,
@@ -192,7 +195,17 @@ const resolvers = {
         book.author = author;
       }
 
-      return book.save();
+      try {
+        const createdBook = await book.save();
+        return createdBook;
+      } catch (error) {
+        throw new GraphQLError("title must be greater than 5 characters", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.title,
+          },
+        });
+      }
     },
     editAuthor: (root, args) => {
       console.log("yo");

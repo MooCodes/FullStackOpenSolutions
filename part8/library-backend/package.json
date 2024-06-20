@@ -10,7 +10,9 @@
   "description": "",
   "dependencies": {
     "@apollo/server": "^4.10.4",
-    "graphql": "^16.8.2",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.4.3",
+    "mongoose-unique-validator": "^5.0.0",
     "uuid": "^10.0.0"
   }
 }

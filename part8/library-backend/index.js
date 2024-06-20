@@ -1,6 +1,25 @@
 const { v4: uuidv4 } = require("uuid");
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const Book = require("./models/book");
+const Author = require("./models/author");
+
+require("dotenv").config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+console.log("connecting to", MONGODB_URI);
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("error connecting to MongoDB:", error.message);
+  });
 
 let authors = [
   {
@@ -102,9 +121,9 @@ const typeDefs = `
   type Book {
     title: String!
     published: Int
-    author: String!
+    author: Author!
     id: ID!
-    genres: [String!]
+    genres: [String!]!
   }
 
   type Author { 
@@ -137,24 +156,10 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
+    bookCount: () => Book.collection.countDocuments(),
     authorCount: () => authors.length,
     allBooks: (root, args) => {
-      if (args.name) {
-        if (args.genre)
-          return books.filter(
-            (book) =>
-              book.author === args.name && book.genres.includes(args.genre)
-          );
-
-        return books.filter((book) => book.author === args.name);
-      }
-
-      // didn't provide a name, so check for genre parameter
-      if (args.genre)
-        return books.filter((book) => book.genres.includes(args.genre));
-
-      return books;
+      return Book.find({});
     },
     allAuthors: () => authors,
   },
@@ -164,17 +169,29 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: (root, args) => {
-      // if the author doesn't exist, add them
-      if (!authors.find((a) => a.name === args.author)) {
-        authors = authors.concat({ name: args.author, id: authors.length + 1 });
+    addBook: async (root, args) => {
+      // check if there's an author that exists
+      const author = await Author.findOne({ name: args.author });
+
+      const book = new Book({
+        title: args.title,
+        published: args.published,
+        genres: args.genres,
+      });
+
+      // if there's no author, create one
+      if (!author) {
+        const newAuthor = new Author({ name: args.author });
+        await newAuthor.save();
+        book.author = newAuthor;
+      } else {
+        book.author = author;
       }
 
-      const newBook = { ...args, id: books.length + 1 };
-      books = books.concat(newBook);
-      return newBook;
+      return book.save();
     },
     editAuthor: (root, args) => {
+      console.log("yo");
       const author = authors.find((a) => a.name === args.name);
       if (!author) {
         return null;

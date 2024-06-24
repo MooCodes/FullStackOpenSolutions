@@ -253,7 +253,6 @@ const resolvers = {
         });
       }
 
-      console.log("yo");
       const author = authors.find((a) => a.name === args.name);
       if (!author) {
         return null;

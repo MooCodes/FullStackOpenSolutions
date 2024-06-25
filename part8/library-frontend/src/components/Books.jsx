@@ -5,16 +5,14 @@ import { useEffect } from "react";
 
 const Books = (props) => {
   const [genre, setGenre] = useState("");
-  const [getBooks, { called, loading, data }] = useLazyQuery(
-    ALL_BOOKS_BY_GENRE,
-    {
-      variables: { genre: genre },
-    }
-  );
+  const [getBooks, { called, loading, data }] =
+    useLazyQuery(ALL_BOOKS_BY_GENRE);
 
   useEffect(() => {
     console.log("executing since genre changed", genre);
-    getBooks();
+    getBooks({
+      variables: { genre },
+    });
   }, [genre]);
 
   if (!props.show) {

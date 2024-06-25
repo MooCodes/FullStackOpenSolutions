@@ -2,43 +2,28 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { ALL_BOOKS_BY_GENRE, CURRENT_USER } from "../queries";
 
-const Recommend = ({ show }) => {
-  const userResult = useQuery(CURRENT_USER);
-  const [getBooks, { called, loading, data }] = useLazyQuery(
-    ALL_BOOKS_BY_GENRE,
-    {
-      variables: { genre: "" },
-    }
-  );
+const Recommend = ({ show, favoriteGenre }) => {
+  console.log(favoriteGenre);
 
-  useEffect(() => {
-    if (userResult.data) {
-      console.log("have data");
-      getBooks({ variables: { genre: userResult.data.me.favoriteGenre } });
-    } else {
-      getBooks();
-    }
-  }, [userResult]);
+  const { loading, error, data } = useQuery(ALL_BOOKS_BY_GENRE, {
+    variables: { genre: favoriteGenre },
+  });
 
-  if (userResult.loading || loading) {
-    return <div>loading...</div>;
-  }
+  if (!show) return null;
+
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>{error.message}</div>;
 
   const books = data.allBooks;
-  console.log(books);
 
   // const booksToShow = books.filter((b) =>
   //   b.genres.includes(user.favoriteGenre)
   // );
 
-  if (!show) return null;
-
   return (
     <div>
       <h2>recommendations</h2>
-      <p>
-        books in your favorite genre <strong>{userResult.data.me.favoriteGenre}</strong>
-      </p>
+      <p>books in your favorite genre {favoriteGenre}</p>
       <table>
         <tbody>
           <tr>

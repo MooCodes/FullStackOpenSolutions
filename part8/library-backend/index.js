@@ -238,7 +238,6 @@ startStandaloneServer(server, {
   context: async ({ req, res }) => {
     const auth = req ? req.headers.authorization : null;
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
-      console.log("parsing token");
       const decodedToken = jwt.verify(
         auth.substring(7),
         process.env.JWT_SECRET

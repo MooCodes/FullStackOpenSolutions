@@ -5,16 +5,19 @@ import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
 import { useApolloClient } from "@apollo/client";
+import { CURRENT_USER } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null);
+  const [favoriteGenre, setFavoriteGenre] = useState("");
   const client = useApolloClient();
 
   const logout = () => {
-    setToken(null);
+    setPage("authors");
     localStorage.clear();
     client.resetStore();
+    setToken(null);
   };
 
   return (
@@ -43,9 +46,10 @@ const App = () => {
         setPage={setPage}
         show={page === "login"}
         setToken={setToken}
+        setFavoriteGenre={setFavoriteGenre}
       />
 
-      <Recommend show={page === "recommend"} />
+      <Recommend show={page === "recommend"} favoriteGenre={favoriteGenre} />
     </div>
   );
 };

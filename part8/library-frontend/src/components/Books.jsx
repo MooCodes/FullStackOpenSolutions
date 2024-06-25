@@ -1,27 +1,40 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
+import { useQuery, useLazyQuery } from "@apollo/client";
+import { ALL_BOOKS, ALL_BOOKS_BY_GENRE } from "../queries";
+import { useEffect } from "react";
 
 const Books = (props) => {
   const [genre, setGenre] = useState("");
-  const result = useQuery(ALL_BOOKS);
+  const [getBooks, { called, loading, data }] = useLazyQuery(
+    ALL_BOOKS_BY_GENRE,
+    {
+      variables: { genre: genre },
+    }
+  );
+
+  useEffect(() => {
+    console.log("executing since genre changed", genre);
+    getBooks();
+  }, [genre]);
 
   if (!props.show) {
     return null;
   }
 
-  if (result.loading) {
+  if (called && loading) {
     return <div>loading...</div>;
   }
 
-  console.log(result);
+  console.log(data);
 
-  const books = genre
-    ? result.data.allBooks.filter((book) => book.genres.includes(genre))
-    : result.data.allBooks;
+  const books = data ? data.allBooks : [];
+
+  // const books = genre
+  //   ? data.allBooks.filter((book) => book.genres.includes(genre))
+  //   : data.allBooks;
 
   // get all genres from all books
-  const allGenres = result.data.allBooks.reduce((acc, book) => {
+  const allGenres = data.allBooks.reduce((acc, book) => {
     book.genres.forEach((genre) => {
       if (!acc.includes(genre)) {
         acc.push(genre);

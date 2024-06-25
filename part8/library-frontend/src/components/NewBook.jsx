@@ -11,7 +11,6 @@ const NewBook = (props) => {
 
   const [addBook] = useMutation(ADD_BOOK, {
     onError: (error) => {
-      console.log("not working wtf");
       console.log(error);
     },
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
@@ -31,8 +30,6 @@ const NewBook = (props) => {
     addBook({
       variables: { title, author, published: Number(published), genres },
     });
-
-    console.log("did not work");
 
     setTitle("");
     setPublished("");

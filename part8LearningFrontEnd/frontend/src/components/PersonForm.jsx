@@ -13,6 +13,7 @@ const PersonForm = ({ setError }) => {
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join("\n");
       setError(messages);
+      console.log('wtf');
     }
   });
 

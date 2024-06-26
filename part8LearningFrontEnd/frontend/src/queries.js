@@ -79,3 +79,16 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const PERSON_ADDED = gql`
+  subscription {
+    personAdded {
+      name
+      phone
+      id
+      address {
+        street
+        city
+      }
+    }
+  }`

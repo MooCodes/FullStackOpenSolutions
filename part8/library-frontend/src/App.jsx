@@ -4,14 +4,20 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm";
 import Recommend from "./components/Recommend";
-import { useApolloClient } from "@apollo/client";
-import { CURRENT_USER } from "./queries";
+import { useApolloClient, useSubscription } from "@apollo/client";
+import { BOOK_ADDED } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState(null);
   const [favoriteGenre, setFavoriteGenre] = useState("");
   const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data, "book added");
+    },
+  });
 
   const logout = () => {
     setPage("authors");

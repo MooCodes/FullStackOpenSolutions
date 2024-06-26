@@ -18,10 +18,6 @@ const NewBook = (props) => {
     onError: (error) => {
       console.log(error);
     },
-    refetchQueries: [
-      { query: ALL_BOOKS_BY_GENRE, variables: { genre: "" } },
-      { query: ALL_AUTHORS },
-    ],
   });
 
   if (!props.show) {

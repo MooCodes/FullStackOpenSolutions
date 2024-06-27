@@ -12,6 +12,8 @@ const http = require("http");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Book = require("./models/book");
+const Author = require("./models/author");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
@@ -31,10 +33,7 @@ mongoose
     console.log("error connecting to MongoDB:", error.message);
   });
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+mongoose.set("debug", true);
 
 const start = async () => {
   const app = express();

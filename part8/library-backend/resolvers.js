@@ -66,9 +66,7 @@ const resolvers = {
       // check if there's an author that exists
       const author = await Author.findOne({ name: args.author });
 
-      let book;
-
-      book = new Book({
+      const book = new Book({
         title: args.title,
         published: args.published,
         genres: args.genres,
@@ -76,16 +74,49 @@ const resolvers = {
 
       // if there's no author, create one
       if (!author) {
+        console.log("author not found");
         const newAuthor = new Author({ name: args.author });
-        await newAuthor.save();
-        book.author = newAuthor;
+        console.log("Created new author", newAuthor);
+        // book.author = newAuthor;
+        console.log("Set book author to new author", book.author);
+        // newAuthor.books = [book];
+        // console.log("Set new author books to book", newAuthor.books);
+
+        try {
+          await newAuthor.save();
+        } catch (error) {
+          console.error(error);
+          throw new GraphQLError("Saving the author failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.author,
+              error,
+            },
+          });
+        }
       } else {
         book.author = author;
+        author.books = [...author.books, book];
+
+        try {
+          await author.save();
+        } catch (error) {
+          console.error(error);
+          throw new GraphQLError("Saving the author failed", {
+            extensions: {
+              code: "BAD_USER_INPUT",
+              invalidArgs: args.author,
+              error,
+            },
+          });
+        }
       }
 
       try {
+        console.log("Saving the book", book);
         await book.save();
       } catch (error) {
+        console.error(error);
         throw new GraphQLError("Saving the book failed", {
           extensions: {
             code: "BAD_USER_INPUT",
@@ -95,6 +126,7 @@ const resolvers = {
         });
       }
 
+      clg("Book saved, publishing it now");
       pubsub.publish("BOOK_ADDED", { bookAdded: book });
 
       return book;

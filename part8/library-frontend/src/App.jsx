@@ -22,7 +22,7 @@ const App = () => {
         query: ALL_BOOKS_BY_GENRE,
         variables: { genre: "" },
       });
-      console.log("allBooks: ",allBooks);
+      console.log("allBooks: ", allBooks);
       client.writeQuery({
         query: ALL_BOOKS_BY_GENRE,
         variables: { genre: "" },

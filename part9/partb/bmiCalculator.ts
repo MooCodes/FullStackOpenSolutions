@@ -20,3 +20,4 @@ if (height < 0 || weight < 0) {
 }
 
 console.log(calculateBmi(height, weight));
+

@@ -1,29 +1,7 @@
 import Header from "./components/Header";
-import Content from "./components/Content";
 import Total from "./components/Total";
-
-interface CoursePartBase {
-  name: string;
-  exerciseCount: number;
-}
-
-interface CoursePartBasic extends CoursePartBase {
-  description: string;
-  kind: "basic";
-}
-
-interface CoursePartGroup extends CoursePartBase {
-  groupProjectCount: number;
-  kind: "group";
-}
-
-interface CoursePartBackground extends CoursePartBase {
-  description: string;
-  backgroundMaterial: string;
-  kind: "background";
-}
-
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+import { CoursePart } from "./types/CoursePart";
+import Part from "./components/Part";
 
 const App = () => {
   const courseName = "Half Stack application development";
@@ -54,6 +32,13 @@ const App = () => {
         "https://type-level-typescript.com/template-literal-types",
       kind: "background",
     },
+    {
+      name: "Backend development",
+      exerciseCount: 21,
+      description: "Typing the backend",
+      requirements: ["nodejs", "jest"],
+      kind: "special"
+    }
   ];
 
   const totalExercises = courseParts.reduce(
@@ -61,21 +46,17 @@ const App = () => {
     0
   );
 
-  courseParts.map(part => {
-    if (part.kind === "group") {
-      return part.groupProjectCount;
-    }
-  })
+  // courseParts.map((part) => {
+  //   if (part.kind === "group") {
+  //     return part.groupProjectCount;
+  //   }
+  // });
 
   return (
     <div>
       <Header courseName={courseName} />
       {courseParts.map((part) => (
-        <Content
-          key={part.name}
-          name={part.name}
-          exerciseCount={part.exerciseCount}
-        />
+        <Part key={part.name} part={part} />
       ))}
       <Total totalExercises={totalExercises} />
     </div>

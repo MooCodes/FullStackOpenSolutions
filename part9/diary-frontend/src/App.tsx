@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface Diary {
   id: number;
@@ -19,15 +19,24 @@ const getAllDiaries = async () => {
 };
 
 const createDiary = async (entry: DiaryEntry) => {
-  const { data } = await axios.post<Diary>(
-    "http://localhost:3000/api/diaries",
-    entry
-  );
-  return data;
+  try {
+    const { data } = await axios.post<Diary>(
+      "http://localhost:3000/api/diaries",
+      entry
+    );
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error;
+    } else {
+      throw new Error("Unknown error when creating diary");
+    }
+  }
 };
 
 function App() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [entry, setEntry] = useState<DiaryEntry>({
     date: "",
     weather: "",
@@ -41,7 +50,17 @@ function App() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createDiary(entry).then((data) => setDiaries([...diaries, data]));
+    createDiary(entry)
+      .then((data) =>
+        setDiaries((prevDiaries) =>
+          data ? [...prevDiaries, data] : prevDiaries
+        )
+      )
+      .catch((error) => {
+        const err = error as AxiosError;
+        setErrorMessage(err.response!.data as string);
+        setTimeout(() => setErrorMessage(""), 5000);
+      });
   };
 
   if (diaries.length === 0) return <>Loading...</>;
@@ -49,6 +68,7 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {errorMessage && <h3 style={{ color: "red" }}>{errorMessage}</h3>}
         <h2>Add New Entry</h2>
         <div>
           date:{" "}

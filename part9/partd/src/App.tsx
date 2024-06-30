@@ -4,6 +4,7 @@ import { CoursePart } from "./types/CoursePart";
 import Part from "./components/Part";
 
 const App = () => {
+
   const courseName = "Half Stack application development";
   const courseParts: CoursePart[] = [
     {

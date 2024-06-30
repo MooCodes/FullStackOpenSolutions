@@ -74,28 +74,91 @@ function App() {
           date:{" "}
           <input
             value={entry.date}
-            type="text"
+            type="date"
             name="date"
             onChange={(e) => setEntry({ ...entry, date: e.target.value })}
           />
         </div>
         <div>
           weather:{" "}
-          <input
-            value={entry.weather}
-            type="text"
-            name="weather"
-            onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
-          />
+          <div>
+            <input
+              type="radio"
+              name="weather"
+              value="sunny"
+              onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
+            />
+            sunny
+            <input
+              type="radio"
+              name="weather"
+              value="rainy"
+              onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
+            />
+            rainy
+            <input
+              type="radio"
+              name="weather"
+              value="cloudy"
+              onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
+            />
+            cloudy
+            <input
+              type="radio"
+              name="weather"
+              value="stormy"
+              onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
+            />
+            stormy
+            <input
+              type="radio"
+              name="weather"
+              value="windy"
+              onChange={(e) => setEntry({ ...entry, weather: e.target.value })}
+            />
+            windy
+          </div>
         </div>
         <div>
           visibility:{" "}
-          <input
-            value={entry.visibility}
-            type="text"
-            name="visibility"
-            onChange={(e) => setEntry({ ...entry, visibility: e.target.value })}
-          />
+          <div>
+            <input
+              type="radio"
+              name="visibility"
+              value="great"
+              onChange={(e) =>
+                setEntry({ ...entry, visibility: e.target.value })
+              }
+            />
+            great
+            <input
+              type="radio"
+              name="visibility"
+              value="good"
+              onChange={(e) =>
+                setEntry({ ...entry, visibility: e.target.value })
+              }
+            />
+            good
+            <input
+              type="radio"
+              name="visibility"
+              value="ok"
+              onChange={(e) =>
+                setEntry({ ...entry, visibility: e.target.value })
+              }
+            />
+            ok
+            <input
+              type="radio"
+              name="visibility"
+              value="poor"
+              onChange={(e) =>
+                setEntry({ ...entry, visibility: e.target.value })
+              }
+            />
+            poor
+          </div>
         </div>
         <div>
           comment:{" "}
